@@ -32,13 +32,9 @@ function dateToTimestamp(date) {
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
 function getTime(date) {
-  const formatTimeUnit = (timeUnitNum) => {
-    return timeUnitNum.toString().padStart(2, '0');
-  };
-  const hoursStr = formatTimeUnit(date.getHours());
-  const minutesStr = formatTimeUnit(date.getMinutes());
-  const secondsStr = formatTimeUnit(date.getSeconds());
-  return `${hoursStr}:${minutesStr}:${secondsStr}`;
+  const timeStrWithZone = date.toTimeString();
+  const timeStr = timeStrWithZone.slice(0, 8);
+  return timeStr;
 }
 
 /**
