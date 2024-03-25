@@ -74,8 +74,18 @@ function getDayName(date) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  const daysInAWeek = 7;
+  const idxFriday = 5;
+  const idxDateDay = date.getUTCDay();
+  let deltaToNextFriday = daysInAWeek - (idxDateDay - idxFriday);
+  deltaToNextFriday =
+    deltaToNextFriday > daysInAWeek
+      ? deltaToNextFriday % daysInAWeek
+      : deltaToNextFriday;
+  const dateInMs = date.setUTCDate(date.getUTCDate() + deltaToNextFriday);
+  const nextFridayDate = new Date(dateInMs);
+  return nextFridayDate;
 }
 
 /**
