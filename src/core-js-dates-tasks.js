@@ -196,8 +196,35 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const WEEK_DAY = {
+    Sa: 6,
+    Su: 0,
+  };
+  const NUM_DAYS_IN_A_WEEK = 7;
+  const NUM_WEND_DAYS_IN_A_WEEK = 2;
+  const dateLastDayInMonth = new Date(Date.UTC(year, month, 0));
+  const lastDateInMonth = dateLastDayInMonth.getDate();
+  const fullWeeksInMonth = Math.floor(lastDateInMonth / NUM_DAYS_IN_A_WEEK);
+  const remainDays = lastDateInMonth % NUM_DAYS_IN_A_WEEK;
+  let totalWeekendDays = NUM_WEND_DAYS_IN_A_WEEK * fullWeeksInMonth;
+  const dayWeekLastDayInMonth = dateLastDayInMonth.getDay();
+  let weekendInRemainDays;
+  if (remainDays > 0 && dayWeekLastDayInMonth === WEEK_DAY.Su) {
+    weekendInRemainDays = remainDays === 1 ? 1 : 2;
+  } else if (remainDays > 0 && dayWeekLastDayInMonth === WEEK_DAY.Sa) {
+    weekendInRemainDays = 1;
+  } else if (remainDays >= dayWeekLastDayInMonth + 2) {
+    weekendInRemainDays = 2;
+  } else if (remainDays === dayWeekLastDayInMonth + 1) {
+    weekendInRemainDays = 1;
+  } else {
+    weekendInRemainDays = 0;
+  }
+
+  totalWeekendDays += weekendInRemainDays;
+
+  return totalWeekendDays;
 }
 
 /**
