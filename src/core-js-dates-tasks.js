@@ -255,8 +255,12 @@ function getNextFridayThe13th(date) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  const convertZeroBaseToOneBase = (number) => number + 1;
+  const month = convertZeroBaseToOneBase(date.getMonth());
+  const monthsInQuarter = 3;
+  const yearQuarter = Math.ceil(month / monthsInQuarter);
+  return yearQuarter;
 }
 
 /**
