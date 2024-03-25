@@ -213,8 +213,52 @@ function getCountWeekendsInMonth(/* month, year */) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
+function getWeekNumberByDate(date) {
+  const WEEK_DAY = {
+    Mo: 1,
+    Tu: 2,
+    We: 3,
+    Th: 4,
+    Fr: 5,
+    Sa: 6,
+    Su: 0,
+  };
+  const JANUARY_1ST = {
+    month: 0,
+    date: 1,
+  };
+  const NUM_DAYS_IN_A_WEEK = 7;
+  const setPrevMonthLastDay = (dateIn) => dateIn.setDate(0);
+
+  const date1stJan = new Date(date);
+  date1stJan.setMonth(JANUARY_1ST.month);
+  date1stJan.setDate(JANUARY_1ST.date);
+  const weekDay1stJan = date1stJan.getDay();
+  let daysWeekShift;
+  if (weekDay1stJan === WEEK_DAY.Mo) {
+    daysWeekShift = 0;
+  } else if (weekDay1stJan === WEEK_DAY.Su) {
+    daysWeekShift = 1;
+  } else {
+    daysWeekShift = NUM_DAYS_IN_A_WEEK - (weekDay1stJan - 1);
+  }
+  const addWeek = daysWeekShift === 0 ? 0 : 1;
+
+  const dateClone = new Date(date);
+  let month = dateClone.getMonth();
+  let days = dateClone.getDate();
+  let sumDaysFromYearStart = days;
+  while (month !== JANUARY_1ST.month) {
+    setPrevMonthLastDay(dateClone);
+    month = dateClone.getMonth();
+    days = dateClone.getDate();
+    sumDaysFromYearStart += days;
+  }
+  const numWeek =
+    Math.ceil((sumDaysFromYearStart - daysWeekShift) / NUM_DAYS_IN_A_WEEK) +
+    addWeek;
+
+  return numWeek;
 }
 
 /**
