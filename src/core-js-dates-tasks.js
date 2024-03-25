@@ -352,8 +352,38 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const getFormattedDate = (date) => {
+    const year = date.getFullYear();
+    const monthOneBased = date.getMonth() + 1;
+    const month = monthOneBased.toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${day}-${month}-${year}`;
+  };
+  const getDateFromFormattedDate = (formattedDate) => {
+    const [dayF, monthF, yearF] = formattedDate.split('-');
+    const monthZeroBased = +monthF - 1;
+    const dateOut = new Date(Date.UTC(+yearF, monthZeroBased, +dayF));
+    return dateOut;
+  };
+  const { start: periodStart, end: periodEnd } = period;
+  const periodStartDate = new Date(getDateFromFormattedDate(periodStart));
+  const periodEndDate = new Date(getDateFromFormattedDate(periodEnd));
+  const wordSheduleArr = [];
+  const currDate = new Date(periodStartDate);
+  let workDays = 1;
+  while (currDate <= periodEndDate) {
+    if (workDays <= countWorkDays) {
+      wordSheduleArr.push(getFormattedDate(currDate));
+      workDays += 1;
+      currDate.setDate(currDate.getDate() + 1);
+    } else {
+      currDate.setDate(currDate.getDate() + countOffDays);
+      workDays = 1;
+    }
+  }
+
+  return wordSheduleArr;
 }
 
 /**
